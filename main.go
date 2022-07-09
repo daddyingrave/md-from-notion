@@ -8,12 +8,19 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"time"
 
 	"gopkg.in/yaml.v3"
 )
 
-var UUID = regexp.MustCompile(`\s[\da-f]{32}`)
-var FileName = regexp.MustCompile(`/[^/]+$`)
+const CreatedDateFormat = "January 2, 2006 3:04 PM"
+
+var (
+	UUID     = regexp.MustCompile(`\s[\da-f]{32}`)
+	FileName = regexp.MustCompile(`/[^/]+$`)
+	// CreatedDate specific to my notes
+	CreatedDate = regexp.MustCompile(`Created: (.+)`)
+)
 
 func main() {
 	conf, err := readConf()
@@ -57,6 +64,12 @@ func main() {
 			err = os.WriteFile(newPath, content, 0666)
 			if err != nil {
 				return err
+			}
+
+			err = os.Chtimes(newPath, time.Now(), extractDate(content))
+
+			if err != nil {
+				fmt.Println(err)
 			}
 		}
 		return nil
@@ -107,4 +120,28 @@ func readConf() (*Conf, error) {
 	}
 
 	return &c, nil
+}
+
+func extractDate(noteContent []byte) time.Time {
+	// custom fields usually listed in the beginning of the note
+	var contentLength = 0
+	if len(noteContent) < 300 {
+		contentLength = len(noteContent)
+	} else {
+		contentLength = 300
+	}
+
+	matches := CreatedDate.FindSubmatch(noteContent[:contentLength])
+	if len(matches) < 1 {
+		return time.Now()
+	} else {
+		date, err := time.Parse(CreatedDateFormat, string(matches[1]))
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.Println(date)
+
+		return date
+	}
 }

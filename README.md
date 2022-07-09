@@ -3,6 +3,7 @@
 Little helper which makes 2 things:
 1. Remove generated ids from markdown files [exported](https://www.notion.so/help/export-your-content) from [Notion](https://www.notion.so/product)
 2. Ignore all csv files
+3. If "Created" field exist in document sets md document creation date to the same value
 
 This can be useful if you need raw markdown (for example for [Joplin](https://joplinapp.org/) import)
 
