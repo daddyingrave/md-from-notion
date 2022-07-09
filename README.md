@@ -1,0 +1,10 @@
+# md-from-notion
+
+Little helper which makes 2 things:
+1. Remove generated ids from markdown files [exported](https://www.notion.so/help/export-your-content) from [Notion](https://www.notion.so/product)
+2. Ignore all csv files
+
+This can be useful if you need raw markdown (for example for [Joplin](https://joplinapp.org/) import)
+
+Actually this is just my first trainee project in Go.
+And the only reason why it exists is desire to try to write some Go code. :)
