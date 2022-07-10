@@ -140,8 +140,6 @@ func extractDate(noteContent []byte) time.Time {
 			log.Fatal(err)
 		}
 
-		log.Println(date)
-
 		return date
 	}
 }
